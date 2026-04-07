@@ -41,8 +41,15 @@
   opacity: 0.9;
 }
 
-.filter-box {
+.filter-group {
+  display: flex;
+  gap: 16px;
   margin: 16px 0;
+  flex-wrap: wrap;
+}
+
+.filter-box {
+  margin: 0;
 }
 
 .filter-box select {
@@ -78,4 +85,17 @@
 .error {
   color: red;
   margin: 0;
+}
+
+.todo-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.delete-btn {
+  background: #ef4444 !important;
+}
+
+.delete-btn:hover {
+  background: #dc2626 !important;
 }

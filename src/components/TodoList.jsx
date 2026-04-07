@@ -1,4 +1,4 @@
-export default function TodoList({ todos, onToggle }) {
+export default function TodoList({ todos, onToggle, onDelete }) {
   return (
     <div className="card">
       <h2>Danh sách công việc</h2>
@@ -17,9 +17,14 @@ export default function TodoList({ todos, onToggle }) {
                 </p>
               </div>
 
-              <button onClick={() => onToggle(todo.id)}>
-                {todo.completed ? "Bỏ hoàn thành" : "Hoàn thành"}
-              </button>
+              <div className="todo-actions">
+                <button onClick={() => onToggle(todo.id)}>
+                  {todo.completed ? "Bỏ hoàn thành" : "Hoàn thành"}
+                </button>
+                <button className="delete-btn" onClick={() => onDelete(todo.id)}>
+                  Xóa
+                </button>
+              </div>
             </li>
           ))}
         </ul>

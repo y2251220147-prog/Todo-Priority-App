@@ -6,6 +6,7 @@ import {
   addTodo,
   filterTodos,
   getTodoStats,
+  removeTodo,
   sortTodosByPriority,
   toggleTodoStatus,
 } from "./utils/todoUtils";
@@ -20,6 +21,7 @@ const initialTodos = [
 export default function App() {
   const [todos, setTodos] = useState(initialTodos);
   const [filter, setFilter] = useState("all");
+  const [priorityFilter, setPriorityFilter] = useState("all");
 
   function handleAdd(todo) {
     setTodos((prev) => addTodo(prev, todo));
@@ -29,9 +31,19 @@ export default function App() {
     setTodos((prev) => toggleTodoStatus(prev, id));
   }
 
+  function handleDelete(id) {
+    if (window.confirm("Bạn có chắc chắn muốn xóa công việc này?")) {
+      setTodos((prev) => removeTodo(prev, id));
+    }
+  }
+
   const displayedTodos = useMemo(() => {
-    return sortTodosByPriority(filterTodos(todos, filter));
-  }, [todos, filter]);
+    let filtered = filterTodos(todos, filter);
+    if (priorityFilter !== "all") {
+      filtered = filtered.filter((todo) => todo.priority === priorityFilter);
+    }
+    return sortTodosByPriority(filtered);
+  }, [todos, filter, priorityFilter]);
 
   const stats = useMemo(() => getTodoStats(todos), [todos]);
 
@@ -42,17 +54,36 @@ export default function App() {
 
       <TodoForm onAdd={handleAdd} />
 
-      <div className="filter-box">
-        <label>Lọc công việc: </label>
-        <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-          <option value="all">Tất cả</option>
-          <option value="completed">Đã hoàn thành</option>
-          <option value="pending">Chưa hoàn thành</option>
-        </select>
+      <div className="filter-group">
+        <div className="filter-box">
+          <label>Lọc trạng thái: </label>
+          <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+            <option value="all">Tất cả</option>
+            <option value="completed">Đã hoàn thành</option>
+            <option value="pending">Chưa hoàn thành</option>
+          </select>
+        </div>
+
+        <div className="filter-box">
+          <label>Lọc độ ưu tiên: </label>
+          <select
+            value={priorityFilter}
+            onChange={(e) => setPriorityFilter(e.target.value)}
+          >
+            <option value="all">Tất cả</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+        </div>
       </div>
 
       <TodoStats stats={stats} />
-      <TodoList todos={displayedTodos} onToggle={handleToggle} />
+      <TodoList
+        todos={displayedTodos}
+        onToggle={handleToggle}
+        onDelete={handleDelete}
+      />
     </div>
   );
 }

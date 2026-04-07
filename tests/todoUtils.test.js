@@ -6,6 +6,7 @@ import {
   filterTodos,
   sortTodosByPriority,
   getTodoStats,
+  removeTodo,
 } from "../src/utils/todoUtils";
 
 describe("todoUtils", () => {
@@ -74,5 +75,11 @@ describe("todoUtils", () => {
       completed: 1,
       pending: 2,
     });
+  });
+
+  test("removeTodo should remove todo by id", () => {
+    const result = removeTodo(sampleTodos, 1);
+    expect(result).toHaveLength(2);
+    expect(result.find((todo) => todo.id === 1)).toBeUndefined();
   });
 });

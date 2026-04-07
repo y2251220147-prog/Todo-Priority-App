@@ -79,3 +79,11 @@ export function getTodoStats(list) {
     pending: total - completed,
   };
 }
+
+export function removeTodo(list, id) {
+  if (!Array.isArray(list)) {
+    throw new Error("List must be an array");
+  }
+
+  return list.filter((todo) => todo.id !== id);
+}
